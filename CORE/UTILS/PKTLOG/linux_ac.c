@@ -796,7 +796,7 @@ __pktlog_read(struct file *file, char *buf, size_t nbytes, loff_t *ppos)
 					  pde_data(file->f_path.dentry->d_inode);
 #else
 	struct ath_pktlog_info *pl_info = (struct ath_pktlog_info *)
-					  PDE_DATA(file->f_path.dentry->d_inode);
+					  pde_data(file->f_path.dentry->d_inode);
 #endif
 #else
 	struct proc_dir_entry *proc_entry = PDE(file->f_dentry->d_inode);
@@ -936,7 +936,7 @@ pktlog_read(struct file *file, char *buf, size_t nbytes, loff_t *ppos)
 					  pde_data(file->f_path.dentry->d_inode);
 #else
 	struct ath_pktlog_info *pl_info = (struct ath_pktlog_info *)
-					  PDE_DATA(file->f_path.dentry->d_inode);
+					  pde_data(file->f_path.dentry->d_inode);
 #endif
 #else
 	struct proc_dir_entry *proc_entry = PDE(file->f_dentry->d_inode);

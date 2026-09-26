@@ -74,11 +74,11 @@ static void *get_hif_hdl_from_file(struct file *file)
 #endif
 #else
 #if defined(HIF_PCI)
-	scn = (struct hif_pci_softc *)PDE_DATA(file_inode(file));
+	scn = (struct hif_pci_softc *)pde_data(file_inode(file));
 #elif defined(HIF_USB)
-	scn = (struct hif_usb_softc *)PDE_DATA(file_inode(file));
+	scn = (struct hif_usb_softc *)pde_data(file_inode(file));
 #elif defined(HIF_SDIO)
-	scn = (struct ath_hif_sdio_softc *)PDE_DATA(file_inode(file));
+	scn = (struct ath_hif_sdio_softc *)pde_data(file_inode(file));
 #endif
 #endif
 #else
