@@ -21064,7 +21064,11 @@ static int __wlan_hdd_change_station(struct wiphy *wiphy,
  */
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 16, 0)) || defined(WITH_BACKPORTS)
 static int wlan_hdd_change_station(struct wiphy *wiphy,
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+				   struct wireless_dev *wdev,
+#else
 				   struct net_device *dev,
+#endif
 				   const u8 *mac,
 				   struct station_parameters *params)
 #else
@@ -21074,6 +21078,9 @@ static int wlan_hdd_change_station(struct wiphy *wiphy,
 				   struct station_parameters *params)
 #endif
 {
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+	struct net_device *dev = wdev->netdev;
+#endif
 	int ret;
 
 	vos_ssr_protect(__func__);
@@ -21442,7 +21449,11 @@ static int __wlan_hdd_cfg80211_add_key( struct wiphy *wiphy,
 }
 
 static int wlan_hdd_cfg80211_add_key( struct wiphy *wiphy,
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+                                      struct wireless_dev *wdev,
+#else
                                       struct net_device *ndev,
+#endif
 #if defined(FORCE_MLO_SUPPORT) || (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 0, 0))
                                       int link_id,
 #endif
@@ -21451,6 +21462,9 @@ static int wlan_hdd_cfg80211_add_key( struct wiphy *wiphy,
                                       struct key_params *params
                                       )
 {
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+    struct net_device *ndev = wdev->netdev;
+#endif
     int ret;
     vos_ssr_protect(__func__);
     ret = __wlan_hdd_cfg80211_add_key(wiphy, ndev, key_index, pairwise,
@@ -21539,7 +21553,11 @@ static int __wlan_hdd_cfg80211_get_key(
 
 static int wlan_hdd_cfg80211_get_key(
                         struct wiphy *wiphy,
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+                        struct wireless_dev *wdev,
+#else
                         struct net_device *ndev,
+#endif
 #if defined(FORCE_MLO_SUPPORT) || (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 0, 0))
                         int link_id,
 #endif
@@ -21548,6 +21566,9 @@ static int wlan_hdd_cfg80211_get_key(
                         void (*callback)(void *cookie, struct key_params*)
                         )
 {
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+    struct net_device *ndev = wdev->netdev;
+#endif
     int ret;
 
     vos_ssr_protect(__func__);
@@ -21686,13 +21707,20 @@ static int __wlan_hdd_cfg80211_del_key(struct wiphy *wiphy,
  * Return: 0 for success, error number on failure.
  */
 static int wlan_hdd_cfg80211_del_key(struct wiphy *wiphy,
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+					struct wireless_dev *wdev,
+#else
 					struct net_device *dev,
+#endif
 #if defined(FORCE_MLO_SUPPORT) || (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 0, 0))
 					int link_id,
 #endif
 					u8 key_index,
 					bool pairwise, const u8 *mac_addr)
 {
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+	struct net_device *dev = wdev->netdev;
+#endif
 	int ret;
 
 	vos_ssr_protect(__func__);
@@ -27960,10 +27988,17 @@ static int __wlan_hdd_cfg80211_dump_station(struct wiphy *wiphy,
 }
 
 static int wlan_hdd_cfg80211_dump_station(struct wiphy *wiphy,
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+					struct wireless_dev *wdev,
+#else
 					struct net_device *dev,
+#endif
 					int idx, u8 *mac,
 					struct station_info *sinfo)
 {
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+	struct net_device *dev = wdev->netdev;
+#endif
 	int ret;
 
 	vos_ssr_protect(__func__);
@@ -27974,7 +28009,11 @@ static int wlan_hdd_cfg80211_dump_station(struct wiphy *wiphy,
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,16,0)) || defined(WITH_BACKPORTS)
 static int wlan_hdd_cfg80211_get_station(struct wiphy *wiphy,
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+                                         struct wireless_dev *wdev,
+#else
                                          struct net_device *dev,
+#endif
                                          const u8* mac,
                                          struct station_info *sinfo)
 #else
@@ -27984,6 +28023,9 @@ static int wlan_hdd_cfg80211_get_station(struct wiphy *wiphy,
                                          struct station_info *sinfo)
 #endif
 {
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+    struct net_device *dev = wdev->netdev;
+#endif
     int ret;
 
     vos_ssr_protect(__func__);
@@ -28110,12 +28152,19 @@ static int __wlan_hdd_set_default_mgmt_key(struct wiphy *wiphy,
  * Return: 0 on success, error number on failure
  */
 static int wlan_hdd_set_default_mgmt_key(struct wiphy *wiphy,
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+					   struct wireless_dev *wdev,
+#else
 					   struct net_device *netdev,
+#endif
 #if defined(FORCE_MLO_SUPPORT) || (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 0, 0))
 					   int link_id,
 #endif
 					   u8 key_index)
 {
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+	struct net_device *netdev = wdev->netdev;
+#endif
 	int ret;
 
 	vos_ssr_protect(__func__);
@@ -28368,20 +28417,26 @@ fn_end:
     return 0;
 }
 
-#ifdef CFG80211_DEL_STA_V2
 int wlan_hdd_cfg80211_del_station(struct wiphy *wiphy,
-                                         struct net_device *dev,
-                                         struct station_del_parameters *param)
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+                                  struct wireless_dev *wdev,
+#else
+                                  struct net_device *dev,
+#endif
+#ifdef CFG80211_DEL_STA_V2
+                                  struct station_del_parameters *param
 #else
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,16,0)) || defined(WITH_BACKPORTS)
-int wlan_hdd_cfg80211_del_station(struct wiphy *wiphy,
-                                  struct net_device *dev, const u8 *mac)
+                                  const u8 *mac
 #else
-int wlan_hdd_cfg80211_del_station(struct wiphy *wiphy,
-                                  struct net_device *dev, u8 *mac)
+                                  u8 *mac
 #endif
 #endif
+)
 {
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+    struct net_device *dev = wdev->netdev;
+#endif
     int ret;
     struct tagCsrDelStaParams delStaParams;
 
@@ -28450,19 +28505,22 @@ static int __wlan_hdd_cfg80211_add_station(struct wiphy *wiphy,
     return status;
 }
 
-
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,16,0)) || defined(WITH_BACKPORTS)
 static int wlan_hdd_cfg80211_add_station(struct wiphy *wiphy,
-                                         struct net_device *dev,
-                                         const u8 *mac,
-                                         struct station_parameters *params)
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+                                         struct wireless_dev *wdev,
 #else
-static int wlan_hdd_cfg80211_add_station(struct wiphy *wiphy,
                                          struct net_device *dev,
-                                         u8 *mac,
-                                         struct station_parameters *params)
 #endif
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,16,0)) || defined(WITH_BACKPORTS)
+                                         const u8 *mac,
+#else
+                                         u8 *mac,
+#endif
+                                         struct station_parameters *params)
 {
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+    struct net_device *dev = wdev->netdev;
+#endif
     int ret;
 
     vos_ssr_protect(__func__);
