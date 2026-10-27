@@ -2804,7 +2804,11 @@ VOS_STATUS hdd_hostapd_SAPEventCB( tpSap_Event pSapEvent, v_PVOID_t usrDataForCa
                   stainfo->filled |= STATION_INFO_ASSOC_REQ_IES;
 #endif
 #endif
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+                  cfg80211_new_sta(&pHostapdAdapter->wdev,
+#else
                   cfg80211_new_sta(dev,
+#endif
                         (const u8 *)&event->staMac.bytes[0],
                         stainfo, GFP_KERNEL);
                   vos_mem_free(stainfo);
@@ -2940,7 +2944,11 @@ VOS_STATUS hdd_hostapd_SAPEventCB( tpSap_Event pSapEvent, v_PVOID_t usrDataForCa
                     MAC_ADDR_ARRAY(pSapEvent->sapevt.
                     sapStationDisassocCompleteEvent.staMac.bytes));
 
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+                cfg80211_del_sta(&pHostapdAdapter->wdev,
+#else
                 cfg80211_del_sta(dev,
+#endif
                     (const u8 *)&pSapEvent->sapevt.sapStationDisassocCompleteEvent.staMac.bytes[0],
                     GFP_KERNEL);
             }
