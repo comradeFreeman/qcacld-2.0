@@ -3642,7 +3642,11 @@ static eHalStatus roamRoamConnectStatusUpdateHandler( hdd_adapter_t *pAdapter, t
          stainfo->filled = 0;
          stainfo->generation = pHddStaCtx->ibss_sta_generation;
 
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+         cfg80211_new_sta(&pAdapter->wdev,
+#else
          cfg80211_new_sta(pAdapter->dev,
+#endif
                           (const u8 *)pRoamInfo->peerMac,
                           stainfo, GFP_KERNEL);
          vos_mem_free(stainfo);
@@ -3705,7 +3709,11 @@ static eHalStatus roamRoamConnectStatusUpdateHandler( hdd_adapter_t *pAdapter, t
          pHddCtx->sta_to_adapter[pRoamInfo->staId] = NULL;
          pHddStaCtx->ibss_sta_generation++;
 
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+         cfg80211_del_sta(&pAdapter->wdev,
+#else
          cfg80211_del_sta(pAdapter->dev,
+#endif
                          (const u8 *)&pRoamInfo->peerMac,
                          GFP_KERNEL);
          break;

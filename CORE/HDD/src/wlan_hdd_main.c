@@ -1053,10 +1053,16 @@ void wlan_hdd_restart_sap(hdd_adapter_t *ap_adapter)
         delStaParams.mac = NULL;
         delStaParams.subtype = SIR_MAC_MGMT_DEAUTH >> 4;
         delStaParams.reason_code = eCsrForcedDeauthSta;
-        wlan_hdd_cfg80211_del_station(ap_adapter->wdev.wiphy, ap_adapter->dev,
+#endif
+        wlan_hdd_cfg80211_del_station(ap_adapter->wdev.wiphy,
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+                                      &ap_adapter->wdev,
+#else
+                                      ap_adapter->dev,
+#endif
+#ifdef CFG80211_DEL_STA_V2
                                       &delStaParams);
 #else
-        wlan_hdd_cfg80211_del_station(ap_adapter->wdev.wiphy, ap_adapter->dev,
                                       NULL);
 #endif
         hdd_cleanup_actionframe(pHddCtx, ap_adapter);
@@ -13770,7 +13776,11 @@ VOS_STATUS hdd_start_all_adapters( hdd_context_t *pHddCtx )
             hddLog(VOS_TRACE_LEVEL_ERROR, "%s [SSR] send restart supplicant",
                                                        __func__);
             /* event supplicant to restart */
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+            cfg80211_del_sta(&pAdapter->wdev,
+#else
             cfg80211_del_sta(pAdapter->dev,
+#endif
                       (const u8 *)&bcastMac.bytes[0], GFP_KERNEL);
 #endif
             break;
@@ -20633,10 +20643,16 @@ void wlan_hdd_stop_sap(hdd_adapter_t *ap_adapter)
         delStaParams.mac = NULL;
         delStaParams.subtype = SIR_MAC_MGMT_DEAUTH >> 4;
         delStaParams.reason_code = eCsrForcedDeauthSta;
-        wlan_hdd_cfg80211_del_station(ap_adapter->wdev.wiphy, ap_adapter->dev,
+#endif
+        wlan_hdd_cfg80211_del_station(ap_adapter->wdev.wiphy,
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+                                      &ap_adapter->wdev,
+#else
+                                      ap_adapter->dev,
+#endif
+#ifdef CFG80211_DEL_STA_V2
                                       &delStaParams);
 #else
-        wlan_hdd_cfg80211_del_station(ap_adapter->wdev.wiphy, ap_adapter->dev,
                                       NULL);
 #endif
         hdd_cleanup_actionframe(hdd_ctx, ap_adapter);

@@ -1590,7 +1590,11 @@ int wlan_hdd_cfg80211_remain_on_channel( struct wiphy *wiphy,
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,8,0)) && !defined(WITH_BACKPORTS)
                                 enum nl80211_channel_type channel_type,
 #endif
-                                unsigned int duration, u64 *cookie )
+                                unsigned int duration, u64 *cookie
+#if defined (CONFIG_ANDROID) && (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 21))
+                                , const u8 *rx_addr
+#endif
+                                )
 {
    int ret;
 
